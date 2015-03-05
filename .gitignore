@@ -1,0 +1,32 @@
+; Contains gitignore entries, including for `.vagrant`
+; (so you can't accidentally commit a vagrant build),
+; `.kitchen` (for chef testing), `.lock` files
+.vagrant
+Berksfile.lock
+Gemfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+.bundle
+.cache
+.kitchen
+bin
+.kitchen.local.yml
+.coverage
+tmp
+.DS_Store
+hold
+.kitchen/
+.rake_t_cache
+cookbooks/*
+bin/
+.bundle/
+iso
+*.box
+virtualfloppy.vfd
+packer_cache
+packer.log
+start_docs
