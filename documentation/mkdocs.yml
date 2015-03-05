@@ -1,0 +1,26 @@
+site_name: 7-Iron Server Documentation
+pages:
+- ['index.md', 'Welcome']
+# User Guide
+- ['user-guide/index.md', 'User Guide for 7-Iron Server', 'Overview']
+- ['user-guide/tools.md', 'User Guide for 7-Iron Server', 'User Tools']
+- ['user-guide/project-files.md', 'User Guide for 7-Iron Server', 'Manage Project Files']
+- ['user-guide/questions-answers.md', 'User Guide for 7-Iron Server', 'Questions & Answers']
+- ['user-guide/database-mysql.md', 'User Guide for 7-Iron Server', 'More Q&A - Database/MySQL']
+- ['user-guide/vagrant.md', 'User Guide for 7-Iron Server', 'More Q&A - Vagrant']
+- ['user-guide/drupal.md', 'User Guide for 7-Iron Server', 'More Q&A - Drupal']
+# Contributor Guide
+- ['contributor-guide/index.md', '7-Iron Cookbook Contributor Guide', 'Overview']
+- ['contributor-guide/feature-development.md', '7-Iron Cookbook Contributor Guide', 'Feature Development Workflow']
+- ['contributor-guide/server-specs.md', '7-Iron Cookbook Contributor Guide', 'Server Specs']
+- ['contributor-guide/rake-tasks.md', '7-Iron Cookbook Contributor Guide', 'Rake Tasks']
+- ['contributor-guide/tools.md', '7-Iron Cookbook Contributor Guide', 'Tools']
+- ['contributor-guide/questions-answers.md', '7-Iron Cookbook Contributor Guide', 'Questions & Answers']
+# Cookbook Guide
+- ['cookbook-guide/index.md', '7-Iron Cookbook Usage Guide', 'Cookbook Readme']
+- ['cookbook-guide/questions-answers.md', '7-Iron Cookbook Usage Guide', 'Questions & Answers']
+- ['appendix/terms-definitions.md', 'Appendix', 'Terms & Definitions']
+theme: readthedocs
+docs_dir: '.'
+site_dir: '../files/default/start_docs'
+markdown_extensions: [extra]

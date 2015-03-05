@@ -1,0 +1,28 @@
+# The [Kitchen executable](https://docs.getchef.com/ctl_kitchen.html)
+# (which is used for running tests against the build) uses a config file to
+# define what Kitchen needs to be able to run tests against the build
+# "A kitchen.yml file is used to define what is required to run Kitchen,
+#   including the driver, the provisioner, and that platforms that are used to
+#   create instances on which one (or more) test suites will run. ""
+#   - https://docs.getchef.com/config_yml_kitchen.html
+---
+driver:
+  name: vagrant
+  network:
+  - ["private_network", {ip: "192.168.33.33"}]
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-14.04
+    driver_config:
+      customize:
+        memory: 5200
+        cpus: 4
+
+suites:
+  - name: default
+    run_list:
+      - recipe[7-Iron::default]
+    attributes:

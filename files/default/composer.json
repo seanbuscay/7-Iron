@@ -1,0 +1,12 @@
+{
+    "require": {
+        "drush/drush": "6.*",
+        "behat/behat": "~3.0.6",
+        "behat/mink": "~1.6",
+        "behat/mink-extension": "*",
+        "behat/mink-goutte-driver": "*",
+        "phpunit/phpunit": "4.4.*",
+        "squizlabs/php_codesniffer": "2.*",
+        "phpspec/phpspec": "~2.0"
+    }
+}

@@ -1,0 +1,65 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "source_path": "{{user `input`}}box.ovf",
+      "ssh_wait_timeout": "60s",
+      "output_directory": "{{user `output`}}tmp-{{user `rev`}}",
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "headless": true,
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "3024"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "2"
+        ]
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "output": "{{user `output`}}{{user `branch`}}/{{.Provider}}/7-Iron-{{user `tag`}}-{{user `rev`}}.box",
+      "type": "vagrant",
+      "compression_level": 9
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "inline": ["apt-get -y update; apt-get -y install curl"]
+    },
+    {
+      "type": "chef-solo",
+      "install_command": "curl -L https://www.chef.io/chef/install.sh | sudo bash -s -- -v 11.16.4",
+      "cookbook_paths": ["{{user `cookbooks`}}"],
+      "run_list": ["recipe[7-Iron::default]"]
+    },
+    {
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "packer/scripts/cleanup.sh",
+        "packer/scripts/minimize.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "branch": "nobranch",
+    "tag": "notag",
+    "rev": "0",
+    "input":"",
+    "output":"",
+    "cookbooks":""
+  }
+}
