@@ -36,7 +36,7 @@ describe '7-Iron Test Sites' do
         its(:stdout) { should include '200 OK' }
       end
       describe command('lynx -dump -dont_wrap_pre http://7-Iron.start') do
-        its(:stdout) { should include '7-Iron Server - Getting Started' }
+        its(:stdout) { should include 'Vagrant Box for PHP and Drupal Development' }
       end
     end
     context '/dev alias' do
@@ -46,7 +46,7 @@ describe '7-Iron Test Sites' do
     end
     context '/start alias' do
       describe command('lynx -dump -dont_wrap_pre http://localhost/') do
-        its(:stdout) { should include '7-Iron Server - Getting Started' }
+        its(:stdout) { should include 'Vagrant Box for PHP and Drupal Development' }
       end
     end
   end
