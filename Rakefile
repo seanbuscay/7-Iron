@@ -26,6 +26,7 @@ ENV['RECIPES_PATH'] = 'recipes/'
 ENV['README_ERB'] = 'templates/dev/README.md.erb'
 ENV['SPEC_ERB'] = 'templates/dev/starter_spec.rb.erb'
 ENV['RECIPE_ERB'] = 'templates/dev/starter_recipe.rb.erb'
+ENV['VAGRANTFILE_TPL'] = 'templates/dev/Vagrantfile'
 
 task default: [:la]
 
@@ -141,7 +142,7 @@ namespace :packer do
   task :validate do
     Rake::Task['set_git_vars'].execute
     puts '[Validate] Packer template'
-    sh "packer validate -var branch=#{ENV['BRANCH']} -var tag=#{ENV['TAG']} -var rev=#{ENV['REV']} -var input=#{ENV['BUILD_INPUT']} -var output=#{ENV['BUILD_OUTPUT']} -var cookbooks=#{ENV['COOKBOOKS']} packer.json"
+    sh "packer validate -var branch=#{ENV['BRANCH']} -var tag=#{ENV['TAG']} -var rev=#{ENV['REV']} -var input=#{ENV['BUILD_INPUT']} -var output=#{ENV['BUILD_OUTPUT']} -var cookbooks=#{ENV['COOKBOOKS']} -var vagrantfiletpl=#{ENV['VAGRANTFILE_TPL']} packer.json"
     puts '[Validated] Packer template'
   end
   desc 'Inspect Packer template'
@@ -152,7 +153,7 @@ namespace :packer do
   task :build do
     Rake::Task['set_git_vars'].execute
     puts '[Build] from Packer template'
-    sh "packer build --force -var branch=#{ENV['BRANCH']} -var tag=#{ENV['TAG']} -var rev=#{ENV['REV']} -var input=#{ENV['BUILD_INPUT']} -var output=#{ENV['BUILD_OUTPUT']} -var cookbooks=#{ENV['COOKBOOKS']} packer.json"
+    sh "packer build --force -var branch=#{ENV['BRANCH']} -var tag=#{ENV['TAG']} -var rev=#{ENV['REV']} -var input=#{ENV['BUILD_INPUT']} -var output=#{ENV['BUILD_OUTPUT']} -var cookbooks=#{ENV['COOKBOOKS']} -var vagrantfiletpl=#{ENV['VAGRANTFILE_TPL']} packer.json"
     puts '[Built] from Packer template'
   end
 end

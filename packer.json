@@ -30,6 +30,7 @@
     {
       "output": "{{user `output`}}{{user `branch`}}/{{.Provider}}/7-Iron-{{user `tag`}}-{{user `rev`}}.box",
       "type": "vagrant",
+      "vagrantfile_template": "{{user `vagrantfiletpl`}}",
       "compression_level": 9
     }
   ],
@@ -60,6 +61,7 @@
     "rev": "0",
     "input":"",
     "output":"",
+    "vagrantfiletpl":"",
     "cookbooks":""
   }
 }
