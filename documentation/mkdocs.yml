@@ -23,4 +23,4 @@ pages:
 theme: readthedocs
 docs_dir: '.'
 site_dir: '../files/default/start_docs'
-markdown_extensions: [extra]
+markdown_extensions: [extra, markdown_include.include]
