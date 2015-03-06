@@ -12,13 +12,12 @@
 
 **You do not need to clone or build anything from the 7-Iron repository.**
 
-Simply run these two commands to start using 7-Iron:
+[Simply download the latest 7-Iron Vagrantfile](https://github.com/seanbuscay/7-Iron/releases/download/v0.0.1/Vagrantfile) to the directory where you want to run the 7-Iron Vagrant Box.
 
-```
-vagrant init seanbuscay/7-Iron
-vagrant up
-```
-Then visit: [User Guide: Quickstart](http://7-iron.github.io/user-guide/#quickstart)
+Then run `vagrant up` in the directory you saved the Vagrantfile.
+
+Visit: [User Guide Overview](http://7-iron.github.io/user-guide/) for next steps.
+
 
 ## For 7-Iron Cookbook Users
 
