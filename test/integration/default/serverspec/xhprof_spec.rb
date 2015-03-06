@@ -1,7 +1,6 @@
 # 7-Iron Xhprof Test
 # Verify Xhprof is installed and ready to use.
 #
-# BACKLOG: Add more tests here for a real scenerio.
 #
 # Copyright 2015 Sean P. Buscay
 #

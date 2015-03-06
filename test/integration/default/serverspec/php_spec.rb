@@ -45,7 +45,6 @@ describe '7-Iron PHP Test' do
       end
       describe php_config('error_reporting') do
         # Test for the error reporting constant.
-        # BACKLOG: Troubleshoot why constant is different between cli & apache.
         # Use http://www.bx.com.au/tools/ultimate-php-error-reporting-wizard
         its(:value) { should eq 32767 }
       end

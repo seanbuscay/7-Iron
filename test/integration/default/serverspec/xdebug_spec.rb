@@ -1,7 +1,6 @@
 # 7-Iron Xdebug Test
 # Verify Xdebug is installed and ready to use.
 #
-# BACKLOG: Expand test for real use case.
 #
 # Copyright 2015 Sean P. Buscay
 #

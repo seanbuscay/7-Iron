@@ -1,7 +1,6 @@
 # Cookbook Name:: 7-Iron
 # Recipe:: website
 #
-# BACKLOG: Move server names and aliases to an attributes array.
 #
 # Copyright 2015 Sean P. Buscay
 #
