@@ -1,0 +1,87 @@
+# 7-Iron's default web docroot is: /home/vagrant/workspace/docroot
+# Webpages in this directory may be reached via your local browser at this URL:
+# http://7-Iron.dev or IP - http://192.168.33.33/dev
+#
+# Scenario One - [DEFAULT] Just serve web pages:
+#
+#   By default, this Vagrantfile will sync the directory it is in to:
+#     /home/vagrant/workspace/docroot
+#
+#   To use 7-Iron to serve your project's webpages, put this Vagrant
+#   file in your project's web root directory.
+#
+#   - Hint: where index.php or index.html is located.
+#
+# Scenario Two - Run tests and serve web pages.
+#
+#   Given your project's web docroot is one level down like this:
+#
+#     /tests
+#     /docroot
+#     /docroot/index.php
+#     /docroot/robots.txt
+#
+#   And you put this Vagrantfile at the top level of your project like this:
+#
+#     /Vagrantfile
+#     /tests
+#     /docroot
+#
+#   And you uncomment this line `#sync_target = "/home/vagrant/workspace"` in
+#   code below.
+#
+#   Then, 7-Iron will sync your project directories like this:
+#
+#     /home/vagrant/workspace/tests
+#     /home/vagrant/workspace/docroot/index.php
+#     /home/vagrant/workspace/docroot/robots.txt
+#
+#   And you may run your tests on 7-Iron as well as serve your web pages.
+#
+#  - Tip: Add .vagrant to your .gitignore file to keep from committing the directory.
+
+# Sets where to put your code on 7-Iron.
+sync_target = "/home/vagrant/workspace/docroot"
+
+# Uncomment the line below for the use case in Scenario Two.
+#sync_target = "/home/vagrant/workspace"
+
+# Sets where on your local machine to sync from.
+# The setting below starts your sync from the directory this Vagrant file is in.
+sync_source = "."
+
+# Change these to lower the memory and cpu usage in the vm.
+# Values can be anything for memory.  Typical values are:
+# 256, 512, 1024.
+memory = '1024'
+# Typical values are 1 through 4.
+cpus = '1'
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box =  "seanbuscay/7-Iron"
+  config.vm.box_version = "0.0.1"
+
+  config.vm.network(:private_network, {:ip=>"192.168.33.33"})
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Uncomment the line below to turn on the ssh forwarding agent.
+  # config.ssh.forward_agent = true
+
+  # Uncomment the line to use the default synced folder type (Virtual box).
+    config.vm.synced_folder sync_source, sync_target
+
+  # Unccoment the line below to use the nfs synced folder type
+  #config.vm.synced_folder sync_source , sync_target, type: 'nfs'
+
+  # Uncomment the three lines below to use the rsync synced folder type
+  #config.vm.synced_folder sync_source, sync_target, type: "rsync",
+  #   rsync__exclude: ".git/",
+  #   rsync__auto: true
+
+  config.vm.provider :virtualbox do |p|
+    p.customize ["modifyvm", :id, "--memory", memory]
+    p.customize ["modifyvm", :id, "--cpus", cpus]
+  end
+
+end

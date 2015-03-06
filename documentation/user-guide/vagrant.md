@@ -1,5 +1,16 @@
 <h1>Vagrant Questions & Answers</h1>
 
+## How do I get the 7-Iron Vagrantfile?
+
+Right click (or Command click) on the link below and choose 'Save link as...'
+
+[7-Iron Vagrantfile](../../appendix/Vagrantfile.txt)
+
+Then save the file as 'Vagrantfile' without any file extension.
+
+Put the Vagrantfile in any directory you would like to run a 7-Iron Server instance.
+
+Run `vagrant up`.
 
 ## How do I set up NFS on my Mac?
 
