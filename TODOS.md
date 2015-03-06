@@ -1,6 +1,3 @@
-- NEXT: Put how to report issues (so I guess I need a public repo)
-- NEXT: Create public repo
-- NEXT: Need to add the default vagrant file
 - TODO: Describe how to use xhprof
     ```
     drush for setup xhprof
