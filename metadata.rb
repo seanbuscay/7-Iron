@@ -34,7 +34,7 @@ long_description <<-desc
 1. LAMP Server in a Vagrant Box for PHP and Drupal developers
 2. Cookbook you can use to build your own custom LAMP server
                   desc
-version '0.0.1'
+version '0.0.2'
 supports 'ubuntu', '>= 14.04'
 
 depends 'apt', '~> 2.5.3'

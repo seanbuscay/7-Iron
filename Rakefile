@@ -50,7 +50,7 @@ end
 
 desc 'Build 7-Iron Vagrant Box and put it in the build directory.'
 task build: ['clean_kitchen', 'set:all', 'make:buildpaths', 'make:vagrantfile', 'make:readme', 'make:docs', 'make:cookbooks', 'make:ovf', 'packer:validate'] do
-  #Rake::Task['packer:build'].execute
+  Rake::Task['packer:build'].execute
   puts '[Built] clean Vagrant Box for deploy'
 end
 

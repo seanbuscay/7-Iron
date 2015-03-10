@@ -11,7 +11,7 @@ To see a list of all Rake tasks run `rake la` from the top level of the 7-Iron p
 The results will look something like this:
 
 ~~~shell
-rake add:recipe               # Add new sk recipe file: Usage `rake add:recipe name="Recipe Name"`
+rake add:recipe               # Add new recipe file: Usage `rake add:recipe name="Recipe Name"`
 rake add:spec                 # Add new spec file: Usage `rake add:spec name="Test Name" desc="Test Description"`
 rake build                    # Build 7-Iron Vagrant Box and put it in the build directory
 rake la                       # Lists all Rake tasks and descriptions
@@ -23,11 +23,17 @@ rake make:docs                # Make documentation
 rake make:docs_server         # Make documentation server
 rake make:ovf                 # Make virtualbox-ovf for packer to build from
 rake make:readme              # Make README.md
+rake make:vagrantfile         # Make Vagrantfile
 rake packer:build             # Build from Packer template
 rake packer:inspect           # Inspect Packer template
 rake packer:validate          # Validate Packer template
+rake set:all                  # Set all vars
+rake set:git_vars             # Get branch and revision from git
+rake set:releasetag           # Set Release Tag
+rake set:version              # Set cookbook version from metadata.rb
 rake style:chef               # Run Chef style checks
 rake style:ruby               # Run Ruby style checks
+rake style:ruby:auto_correct  # Auto-correct RuboCop offenses
 ~~~
 
 
