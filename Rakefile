@@ -60,27 +60,55 @@ task :clean_kitchen do
   puts ['[RAN] kitchen destroy and removed .kitchen directory']
 end
 
-task :set_git_vars do
-  # Set git branch, tag, and revision, to use for the build filename.
-  git_branch = `git rev-parse --abbrev-ref HEAD`
-  ENV['BRANCH'] = git_branch.strip
-  git_tag = `git tag`
-  ENV['TAG'] = git_tag.strip
-  git_rev = `git rev-parse --short HEAD`
-  ENV['REV'] = git_rev.strip
-  # If any git variable is not present or detected, then set generic defaults.
-  ENV['BRANCH'] = 'nobranch' if ENV['BRANCH'] == ''
-  ENV['TAG'] = 'notag' if ENV['TAG'] == ''
-  ENV['REV'] = '0' if ENV['REV'] == ''
-  puts '[SET] Git vars for build.'
+namespace :set do
+  desc 'Set all vars.'
+  task all: ['set:version', 'set:git_vars', 'set:releasetag'] do
+    puts '[SETTING] All vars.'
+  end
+
+  desc 'Set cookbook version from metadata.rb'
+  task :version do
+    require 'chef/cookbook/metadata'
+    metadata_file = 'metadata.rb'
+    # read in metadata
+    metadata = Chef::Cookbook::Metadata.new
+    metadata.from_file(metadata_file)
+    # output cookbook version
+    ENV['TAG'] = "#{metadata.version}"
+    puts '[SET] Cookbook version to: ' + ENV['TAG']
+  end
+  desc 'Get branch and revision from git.'
+  task :git_vars do
+    # Set git branch and revision to use for the build filename.
+    git_branch = `git rev-parse --abbrev-ref HEAD`
+    ENV['BRANCH'] = git_branch.strip
+    git_rev = `git rev-parse --short HEAD`
+    ENV['REV'] = git_rev.strip
+    # If any git variable is not present or detected, then set generic defaults.
+    ENV['BRANCH'] = 'nobranch' if ENV['BRANCH'] == ''
+    ENV['REV'] = '0' if ENV['REV'] == ''
+    puts '[SET] Git vars for build. Branch = ' +  ENV['BRANCH'] + ' Revision = ' + ENV['REV']
+  end
+  desc 'Set Release Tag.'
+  task releasetag: ['set:version'] do
+    vtag = ENV['TAG']
+    require 'erb'
+    require 'ostruct'
+    namespace = OpenStruct.new(releasetag: vtag)
+    template = ENV['RELEASE_ERB']
+    erb = ERB.new(File.read(template))
+    results = erb.result(namespace.instance_eval { binding })
+    filename = 'documentation/release_tag.txt'
+    File.open(filename, 'w') { |file| file.write(results) }
+    puts '[SET] Release tag file to: ' + vtag
+  end
 end
 
 namespace :make do
   desc 'Make README.md'
-  task readme: ['make:releasetag'] do
+  task readme: ['set:releasetag'] do
     sh "knife cookbook doc . --template #{ENV['README_ERB']}"
     puts '[MADE] README.md'
-    Rake::Task['set_git_vars'].execute
     vtag = ENV['TAG']
     require 'erb'
     require 'ostruct'
