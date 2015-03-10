@@ -11,6 +11,12 @@ ENV['INPUT_BOX_URL'] = 'https://opscode-vm-bento.s3.amazonaws.com/vagrant/virtua
 # Set build path to a directory outside the cookbook project.
 ENV['BUILD_PATH'] = '../builds/'
 
+# The private IP address which the 7-Iron box should use.
+ENV['BOX_IP'] = '192.168.33.33'
+
+# Shorthand to a 7-Iron box in HashiCorp's Atlas
+ENV['BOX_NAME'] = 'seanbuscay/7-Iron'
+
 # Nothing else below needs changed.
 
 # Detect and set the absolute path to the project.
@@ -26,7 +32,9 @@ ENV['RECIPES_PATH'] = 'recipes/'
 ENV['README_ERB'] = 'templates/dev/README.md.erb'
 ENV['SPEC_ERB'] = 'templates/dev/starter_spec.rb.erb'
 ENV['RECIPE_ERB'] = 'templates/dev/starter_recipe.rb.erb'
-ENV['VAGRANTFILE_TPL'] = 'templates/dev/Vagrantfile'
+ENV['RELEASE_ERB'] = 'templates/dev/release_tag.erb'
+ENV['VAGRANTFILE_ERB'] = 'templates/dev/Vagrantfile.erb'
+ENV['VAGRANTFILE_TPL'] = ENV['BUILD_PATH'] + 'Vagrantfile'
 
 task default: [:la]
 
@@ -41,7 +49,7 @@ task :la do
 end
 
 desc 'Build 7-Iron Vagrant Box and put it in the build directory.'
-task build: ['clean_kitchen', 'make:buildpaths', 'make:ovf', 'make:cookbooks', 'packer:validate', 'make:readme', 'make:docs'] do
+task build: ['clean_kitchen', 'make:buildpaths', 'make:ovf', 'make:vagrantfile', 'make:readme', 'make:docs', 'make:cookbooks', 'packer:validate'] do
   Rake::Task['packer:build'].execute
   puts '[Built] clean Vagrant Box for deploy'
 end
@@ -69,20 +77,31 @@ end
 
 namespace :make do
   desc 'Make README.md'
-  task :readme do
+  task readme: ['make:releasetag'] do
     sh "knife cookbook doc . --template #{ENV['README_ERB']}"
-    sh "knife cookbook doc . --template #{ENV['README_ERB']} -o documentation/cookbook-guide/index.md"
     puts '[MADE] README.md'
+    Rake::Task['set_git_vars'].execute
+    vtag = ENV['TAG']
+    require 'erb'
+    require 'ostruct'
+    namespace = OpenStruct.new(reltag: vtag)
+    template = 'README.md'
+    erb = ERB.new(File.read(template))
+    results = erb.result(namespace.instance_eval { binding })
+    filename = 'README.md'
+    File.open(filename, 'w') { |file| file.write(results) }
+    puts '[MADE] tagged README.md'
+    FileUtils.cp_r 'README.md', 'documentation/cookbook-guide/index.md', remove_destination: true
   end
   desc 'Make documentation'
-  task docs: ['make:readme'] do
+  task docs: ['make:releasetag', 'make:readme'] do
     Dir.chdir 'documentation'
     sh 'mkdocs build --clean'
     Dir.chdir "#{ENV['PROJECT_PATH']}"
     puts '[MADE] documentation.'
   end
   desc 'Make documentation server'
-  task docs_server: ['make:readme'] do
+  task docs_server: ['make:releasetag', 'make:readme'] do
     puts '[NOTE] If you need to keep using rake while running the server, you should start this command in a new terminal window.'
     Dir.chdir 'documentation'
     sh 'mkdocs serve'
@@ -100,6 +119,39 @@ namespace :make do
     FileUtils.mkdir_p("#{ENV['BUILD_INPUT']}") unless File.exist?("#{ENV['BUILD_INPUT']}")
     FileUtils.mkdir_p("#{ENV['BUILD_OUTPUT']}") unless File.exist?("#{ENV['BUILD_OUTPUT']}")
     puts "[MADE/VERIFIED] build paths under #{ENV['BUILD_PATH']}"
+  end
+  desc 'Make Vagrantfile.'
+  task vagrantfile:  ['make:buildpaths'] do
+    Rake::Task['set_git_vars'].execute
+    boxip = ENV['BOX_IP']
+    boxname = ENV['BOX_NAME']
+    vtag = ENV['TAG']
+    # Strip the letter v off the version tag
+    boxversion = vtag.dup
+    boxversion[0]=''
+    require 'erb'
+    require 'ostruct'
+    namespace = OpenStruct.new(ip: boxip, name: boxname, version: boxversion)
+    template = ENV['VAGRANTFILE_ERB']
+    erb = ERB.new(File.read(template))
+    results = erb.result(namespace.instance_eval { binding })
+    filename = "#{ENV['VAGRANTFILE_TPL']}"
+    File.open(filename, 'w') { |file| file.write(results) }
+    puts '[Generated] a Vagrantfile template.'
+  end
+  desc 'Make Release Tag.'
+  task :releasetag do
+    Rake::Task['set_git_vars'].execute
+    vtag = ENV['TAG']
+    require 'erb'
+    require 'ostruct'
+    namespace = OpenStruct.new(releasetag: vtag)
+    template = ENV['RELEASE_ERB']
+    erb = ERB.new(File.read(template))
+    results = erb.result(namespace.instance_eval { binding })
+    filename = 'documentation/release_tag.txt'
+    File.open(filename, 'w') { |file| file.write(results) }
+    puts '[MADE] a release tag file.'
   end
   desc 'Make virtualbox-ovf for packer to build from.'
   task :ovf do

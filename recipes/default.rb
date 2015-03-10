@@ -3,12 +3,6 @@
 #
 # Note: Each recipe is covered by a test.
 # Comments next to the recipe names its test.
-# BACKLOG: Coder
-# BACKLOG: Drupal coding standards for PHP_CodeSniffer
-# BACKLOG: Registry Rebuild module
-# BACKLOG: Set mysql slow query log
-# BACKLOG: Make sure all logs have a viewer
-# BACKLOG: Put packer vars in a json file and also look at ENV vars.
 #
 # Copyright 2015 Sean P. Buscay
 #

@@ -1,6 +1,5 @@
 <h1>Vagrant Questions & Answers</h1>
 
-
 ## How do I set up NFS on my Mac?
 
 NFS comes pre-installed on OSX 10.5+.
