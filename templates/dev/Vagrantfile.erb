@@ -60,7 +60,7 @@ cpus = '1'
 Vagrant.configure("2") do |config|
 
   config.vm.box =  "<%= name %>"
-  config.vm.box_version = "<%= boxversion %>"
+  config.vm.box_version = "<%= version %>"
 
   config.vm.network(:private_network, {:ip=>"<%= ip %>"})
   config.vm.synced_folder ".", "/vagrant", disabled: true
@@ -85,3 +85,7 @@ Vagrant.configure("2") do |config|
   end
 
 end
+# Build Info
+# Branch: <%= branch %>
+# Revision: <%= buildrev %>
+# Time: <%= buildtime %>

@@ -28,7 +28,7 @@
   ],
   "post-processors": [
     {
-      "output": "{{user `output`}}{{user `branch`}}/{{.Provider}}/7-Iron-{{user `tag`}}-{{user `rev`}}.box",
+      "output": "{{user `output`}}{{user `branch`}}/{{.Provider}}/7-Iron-{{user `rev`}}.box",
       "type": "vagrant",
       "vagrantfile_template": "{{user `vagrantfiletpl`}}",
       "compression_level": 9
@@ -57,7 +57,6 @@
   ],
   "variables": {
     "branch": "nobranch",
-    "tag": "notag",
     "rev": "0",
     "input":"",
     "output":"",
