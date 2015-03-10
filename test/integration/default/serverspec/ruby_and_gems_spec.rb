@@ -35,7 +35,7 @@ describe '7-Iron RVM and GEMS Test' do
       its(:stdout) { should include 'sass (3.4' }
       its(:stdout) { should include 'compass (1.0' }
       its(:stdout) { should include 'jekyll (2.5' }
-      its(:stdout) { should include 'serverspec (2.9' }
+      its(:stdout) { should include 'serverspec (2.10' }
       its(:stdout) { should include 'mailcatcher (0.6.1' }
     end
   end
