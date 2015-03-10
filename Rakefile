@@ -118,25 +118,26 @@ namespace :make do
     results = erb.result(namespace.instance_eval { binding })
     filename = 'README.md'
     File.open(filename, 'w') { |file| file.write(results) }
-    puts '[MADE] tagged README.md'
+    puts '[MADE] README.md with tag:' + vtag
     FileUtils.cp_r 'README.md', 'documentation/cookbook-guide/index.md', remove_destination: true
+    puts '[MADE] documentation/cookbook-guide/index.md with tag:' + vtag
   end
   desc 'Make documentation'
-  task docs: ['make:releasetag', 'make:readme'] do
+  task docs: ['set:releasetag', 'make:readme'] do
     Dir.chdir 'documentation'
     sh 'mkdocs build --clean'
     Dir.chdir "#{ENV['PROJECT_PATH']}"
     puts '[MADE] documentation.'
   end
   desc 'Make documentation server'
-  task docs_server: ['make:releasetag', 'make:readme'] do
+  task docs_server: ['set:releasetag', 'make:readme'] do
     puts '[NOTE] If you need to keep using rake while running the server, you should start this command in a new terminal window.'
     Dir.chdir 'documentation'
     sh 'mkdocs serve'
     puts '[MADE] documentation server at: http://127.0.0.1:8000/'
   end
   desc 'Make Berks vendor cookbooks directory for packer build.'
-  task :cookbooks do
+  task cookbooks: ['make:docs'] do
     FileUtils.remove_dir("#{ENV['COOKBOOKS']}") if File.exist?("#{ENV['COOKBOOKS']}")
     sh "berks vendor #{ENV['COOKBOOKS']}"
     puts "[MADE] #{ENV['COOKBOOKS']}"
@@ -204,10 +205,9 @@ task lint: ['style:chef', 'style:ruby']
 
 namespace :packer do
   desc 'Validate Packer template'
-  task :validate do
-    Rake::Task['set_git_vars'].execute
+  task validate: ['set:git_vars'] do
     puts '[Validate] Packer template'
-    sh "packer validate -var branch=#{ENV['BRANCH']} -var tag=#{ENV['TAG']} -var rev=#{ENV['REV']} -var input=#{ENV['BUILD_INPUT']} -var output=#{ENV['BUILD_OUTPUT']} -var cookbooks=#{ENV['COOKBOOKS']} -var vagrantfiletpl=#{ENV['VAGRANTFILE_TPL']} packer.json"
+    sh "packer validate -var branch=#{ENV['BRANCH']} -var rev=#{ENV['REV']} -var input=#{ENV['BUILD_INPUT']} -var output=#{ENV['BUILD_OUTPUT']} -var cookbooks=#{ENV['COOKBOOKS']} -var vagrantfiletpl=#{ENV['VAGRANTFILE_TPL']} packer.json"
     puts '[Validated] Packer template'
   end
   desc 'Inspect Packer template'
@@ -243,7 +243,7 @@ namespace :add do
     end
   end
 
-  desc 'Add new sk recipe file: Usage `rake add:recipe name="Recipe Name"`'
+  desc 'Add new recipe file: Usage `rake add:recipe name="Recipe Name"`'
   task :recipe do
     if ENV['name']
       name = ENV['name']
