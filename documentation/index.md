@@ -10,7 +10,7 @@
 
 ## Start Using 7-Iron Server Now
 
-1. [Download the latest 7-Iron Vagrantfile](https://github.com/seanbuscay/7-Iron/releases/download/{!release_tag.txt!}/Vagrantfile)
+1. [Download the latest 7-Iron Vagrantfile](https://github.com/seanbuscay/7-Iron/releases/download/v{!release_tag.txt!}/Vagrantfile)
 2. Run `vagrant up` in the directory you saved the Vagrantfile.
 
 Visit: [User Guide Overview](user-guide/index.md) for next steps.
@@ -59,4 +59,4 @@ Please join me and submit/answer issues and comments here: [https://github.com/s
 
 <hr/>
 
-Note: This documentation has been written for 7-Iron - **{!release_tag.txt!}**
+Note: This documentation has been written for 7-Iron - **Version {!release_tag.txt!}**
