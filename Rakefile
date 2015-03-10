@@ -49,8 +49,8 @@ task :la do
 end
 
 desc 'Build 7-Iron Vagrant Box and put it in the build directory.'
-task build: ['clean_kitchen', 'make:buildpaths', 'make:ovf', 'make:vagrantfile', 'make:readme', 'make:docs', 'make:cookbooks', 'packer:validate'] do
-  Rake::Task['packer:build'].execute
+task build: ['clean_kitchen', 'set:all', 'make:buildpaths', 'make:vagrantfile', 'make:readme', 'make:docs', 'make:cookbooks', 'make:ovf', 'packer:validate'] do
+  #Rake::Task['packer:build'].execute
   puts '[Built] clean Vagrant Box for deploy'
 end
 
@@ -149,37 +149,22 @@ namespace :make do
     puts "[MADE/VERIFIED] build paths under #{ENV['BUILD_PATH']}"
   end
   desc 'Make Vagrantfile.'
-  task vagrantfile:  ['make:buildpaths'] do
-    Rake::Task['set_git_vars'].execute
+  task vagrantfile:  ['set:version', 'set:git_vars', 'make:buildpaths'] do
     boxip = ENV['BOX_IP']
     boxname = ENV['BOX_NAME']
     vtag = ENV['TAG']
-    # Strip the letter v off the version tag
-    boxversion = vtag.dup
-    boxversion[0]=''
+    btime = Time.now.asctime
+    branch = ENV['BRANCH']
+    rev = ENV['REV']
     require 'erb'
     require 'ostruct'
-    namespace = OpenStruct.new(ip: boxip, name: boxname, version: boxversion)
+    namespace = OpenStruct.new(ip: boxip, name: boxname, version: vtag, branch: branch, buildrev: rev, buildtime: btime)
     template = ENV['VAGRANTFILE_ERB']
     erb = ERB.new(File.read(template))
     results = erb.result(namespace.instance_eval { binding })
     filename = "#{ENV['VAGRANTFILE_TPL']}"
     File.open(filename, 'w') { |file| file.write(results) }
-    puts '[Generated] a Vagrantfile template.'
-  end
-  desc 'Make Release Tag.'
-  task :releasetag do
-    Rake::Task['set_git_vars'].execute
-    vtag = ENV['TAG']
-    require 'erb'
-    require 'ostruct'
-    namespace = OpenStruct.new(releasetag: vtag)
-    template = ENV['RELEASE_ERB']
-    erb = ERB.new(File.read(template))
-    results = erb.result(namespace.instance_eval { binding })
-    filename = 'documentation/release_tag.txt'
-    File.open(filename, 'w') { |file| file.write(results) }
-    puts '[MADE] a release tag file.'
+    puts '[Generated] Vagrantfile template: ' + filename + ' with tag:' + vtag
   end
   desc 'Make virtualbox-ovf for packer to build from.'
   task :ovf do
@@ -230,10 +215,9 @@ namespace :packer do
     sh 'packer inspect packer.json'
   end
   desc 'Build from Packer template'
-  task :build do
-    Rake::Task['set_git_vars'].execute
+  task build: ['set:git_vars'] do
     puts '[Build] from Packer template'
-    sh "packer build --force -var branch=#{ENV['BRANCH']} -var tag=#{ENV['TAG']} -var rev=#{ENV['REV']} -var input=#{ENV['BUILD_INPUT']} -var output=#{ENV['BUILD_OUTPUT']} -var cookbooks=#{ENV['COOKBOOKS']} -var vagrantfiletpl=#{ENV['VAGRANTFILE_TPL']} packer.json"
+    sh "packer build --force -var branch=#{ENV['BRANCH']} -var rev=#{ENV['REV']} -var input=#{ENV['BUILD_INPUT']} -var output=#{ENV['BUILD_OUTPUT']} -var cookbooks=#{ENV['COOKBOOKS']} -var vagrantfiletpl=#{ENV['VAGRANTFILE_TPL']} packer.json"
     puts '[Built] from Packer template'
   end
 end
