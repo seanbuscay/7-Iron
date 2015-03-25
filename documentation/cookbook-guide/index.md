@@ -12,7 +12,7 @@
 
 **You do not need to clone or build anything from the 7-Iron repository.**
 
-[Simply download the latest 7-Iron Vagrantfile](https://github.com/seanbuscay/7-Iron/releases/download/v0.0.1/Vagrantfile) to the directory where you want to run the 7-Iron Vagrant Box.
+[Simply download the latest 7-Iron Vagrantfile](https://github.com/seanbuscay/7-Iron/releases/download/v0.0.2/Vagrantfile) to the directory where you want to run the 7-Iron Vagrant Box.
 
 Then run `vagrant up` in the directory you saved the Vagrantfile.
 

@@ -12,13 +12,13 @@
 
 **You do not need to clone or build anything from the 7-Iron repository.**
 
-[Simply download the latest 7-Iron Vagrantfile](https://github.com/seanbuscay/7-Iron/releases/download/v0.0.1/Vagrantfile) to the directory where you want to run the 7-Iron Vagrant Box.
+[Simply download the latest 7-Iron Vagrantfile](https://github.com/seanbuscay/7-Iron/releases/download/v0.0.2/Vagrantfile) to the directory where you want to run the 7-Iron Vagrant Box.
 
 Then run `vagrant up` in the directory you saved the Vagrantfile.
 
 Visit: [User Guide Overview](http://7-iron.github.io/user-guide/) for next steps.
 
-
+and here
 ## For 7-Iron Cookbook Users
 
 This README provides detailed documentation about the 7-Iron Cookbook, including its [Attributes](#attributes), [Recipes](#recipes), and [Usage](#usage).
