@@ -1,6 +1,6 @@
 # 7-Iron Server
 
-*Your "Go-to" Vagrant Box for PHP and Drupal Development*
+*Your "Go-to" PHP and Drupal Development Environment*
 
 7-Iron is:
 
